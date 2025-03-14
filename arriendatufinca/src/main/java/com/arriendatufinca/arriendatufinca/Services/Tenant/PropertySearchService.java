@@ -9,7 +9,6 @@ import org.springframework.util.StringUtils;
 
 import com.arriendatufinca.arriendatufinca.Entities.Property;
 import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
-import com.arriendatufinca.arriendatufinca.Repositories.UserRepository;
 import com.arriendatufinca.arriendatufinca.Specifications.PropertySpecification;
 
 import lombok.Data;
@@ -19,8 +18,7 @@ import lombok.Data;
 public class PropertySearchService {
 
     @Autowired
-    private PropertyRepository propertyRepository; 
-    private UserRepository userRepository;
+    private PropertyRepository propertyRepository;
 
     public List<Property> searchProperties(PropertySearchCriteria criteria) {
         Specification<Property> spec = Specification.where(null);
