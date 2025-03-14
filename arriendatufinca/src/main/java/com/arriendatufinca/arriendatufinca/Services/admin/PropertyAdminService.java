@@ -1,5 +1,9 @@
 package com.arriendatufinca.arriendatufinca.Services.admin;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +41,51 @@ public class PropertyAdminService {
         return propertyRepository.save(property);
     }
 
+     public Property updateProperty(Long propertyId, PropertyDTO propertyDTO) {
+        // Buscar la propiedad en la base de datos
+        Property existingProperty = propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new RuntimeException("Property not found"));
+
+        // Verificar y actualizar solo los campos diferentes
+        if (!Objects.equals(existingProperty.getTitle(), propertyDTO.getTitle())) {
+            existingProperty.setTitle(propertyDTO.getTitle());
+        }
+        if (!Objects.equals(existingProperty.getDescription(), propertyDTO.getDescription())) {
+            existingProperty.setDescription(propertyDTO.getDescription());
+        }
+        if (existingProperty.getBathrooms() != propertyDTO.getBathrooms()) {
+            existingProperty.setBathrooms(propertyDTO.getBathrooms());
+        }
+        if (existingProperty.getBedrooms() != propertyDTO.getBedrooms()) {
+            existingProperty.setBedrooms(propertyDTO.getBedrooms());
+        }
+        if (existingProperty.getArea() != propertyDTO.getArea()) {
+            existingProperty.setArea(propertyDTO.getArea());
+        }
+        if (!Objects.equals(existingProperty.getCity(), propertyDTO.getCity())) {
+            existingProperty.setCity(propertyDTO.getCity());
+        }
+        if (!Objects.equals(existingProperty.getAddress(), propertyDTO.getAddress())) {
+            existingProperty.setAddress(propertyDTO.getAddress());
+        }
+        if (existingProperty.getPrice() != propertyDTO.getPrice()) {
+            existingProperty.setPrice(propertyDTO.getPrice());
+        }
+
+        // Guardar los cambios en la base de datos
+        return propertyRepository.save(existingProperty);
+    } 
+
+    public List<String> getPropertyNamesByUserId(Long landlordId) {
+        // Buscar el usuario en la base de datos  
+        User landlord = userRepository.findById(landlordId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Obtener todas las propiedades del usuario y extraer solo los nombres
+        return propertyRepository.findByLandlord(landlord)
+                .stream()
+                .map(Property::getTitle) // Extrae solo el título
+                .collect(Collectors.toList());
+    }
     
 }
