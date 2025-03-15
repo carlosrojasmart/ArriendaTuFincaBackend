@@ -4,16 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE user SET status = true WHERE id=?")
+@Where(clause = "status = 0")
+@SQLDelete(sql = "UPDATE user SET status = 1 WHERE id=?")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +31,7 @@ public class User {
     private String name;
     private String lastName;
     private String email;
-    private String password;
-    private boolean activated = false;
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     // As landlord (owned properties)
     @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)

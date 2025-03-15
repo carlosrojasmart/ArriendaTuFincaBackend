@@ -50,6 +50,11 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+   			<groupId>com.jcraft</groupId>
+ 		    <artifactId>jsch</artifactId>
+    		<version>0.1.53</version>
+		</dependency>
 
 		<!-- Testing -->
 		<dependency>

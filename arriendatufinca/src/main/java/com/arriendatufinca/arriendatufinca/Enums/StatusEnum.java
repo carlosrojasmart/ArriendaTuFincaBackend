@@ -1,5 +1,6 @@
 package com.arriendatufinca.arriendatufinca.Enums;
 
-public enum PropertyStatus {
-    ACTIVE, INACTIVE
+public enum StatusEnum {
+    ACTIVE,
+    DELETED
 }

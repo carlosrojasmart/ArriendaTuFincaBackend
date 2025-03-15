@@ -1,5 +1,5 @@
 package com.arriendatufinca.arriendatufinca.Enums;
 
-public enum RequestStatus {
+public enum RequestState {
     PENDING, APPROVED, REJECTED
 }

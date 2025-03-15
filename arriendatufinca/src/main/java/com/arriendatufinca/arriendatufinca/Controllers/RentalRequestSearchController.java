@@ -1,7 +1,7 @@
 package com.arriendatufinca.arriendatufinca.Controllers;
 
 import com.arriendatufinca.arriendatufinca.Entities.User;
-import com.arriendatufinca.arriendatufinca.Enums.RequestStatus;
+import com.arriendatufinca.arriendatufinca.Enums.RequestState;
 import com.arriendatufinca.arriendatufinca.Services.Tenant.RentalRequestService;
 import com.arriendatufinca.arriendatufinca.Entities.RentalRequest;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class RentalRequestSearchController {
     private RentalRequestResponse toResponse(RentalRequest request) {
         return new RentalRequestResponse(
             request.getId(),
-            request.getStatus(),
+            request.getState(),
             request.getCreatedAt(),
             request.getProperty().getTitle()
         );
@@ -43,7 +43,7 @@ public class RentalRequestSearchController {
     // DTO
     public record RentalRequestResponse(
         Long id,
-        RequestStatus status,
+        RequestState status,
         LocalDateTime createdAt,
         String propertyTitle
     ) {}
