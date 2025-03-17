@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ResourceBundle;
 
 import com.arriendatufinca.arriendatufinca.Conections.SshTunnelStarter;
 
@@ -21,7 +22,11 @@ public class ConnectionTest {
             return;
         }
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/wikigroup", "root", "12345");
+        ResourceBundle bundle = ResourceBundle.getBundle("application");
+		String username = bundle.getString("spring.datasource.username");
+		String password = bundle.getString("spring.datasource.password");
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/test", username, password);
              Statement statement = connection.createStatement()) {
 
             System.out.println("Database connection established successfully.");
@@ -37,11 +42,12 @@ public class ConnectionTest {
             String insertSQL = "INSERT INTO test (name) VALUES ('John')";
             statement.execute(insertSQL);
 
-            /* 
+            /*
             String dropTableSQL = "DROP TABLE test";
             statement.execute(dropTableSQL);
             System.out.println("Table dropped successfully.");
             */
+            
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "ConnectionTest",
+            "request": "launch",
+            "mainClass": "com.arriendatufinca.arriendatufinca.ConnectionTest",
+            "projectName": "arriendatufinca"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ArriendatufincaApplication<arriendatufinca>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.arriendatufinca.arriendatufinca.ArriendatufincaApplication",
+            "projectName": "arriendatufinca",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
