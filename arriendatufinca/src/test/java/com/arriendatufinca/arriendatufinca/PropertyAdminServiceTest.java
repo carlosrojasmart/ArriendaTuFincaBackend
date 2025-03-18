@@ -1,7 +1,10 @@
 package com.arriendatufinca.arriendatufinca;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,7 +71,7 @@ class PropertyAdminServiceTest {
     @Test
     void testCreateProperty() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(landlord));
-        when(propertyRepository.save(any(Property.class))).thenReturn(property);
+        when(propertyRepository.save(any(Property.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Property savedProperty = propertyAdminService.createProperty(propertyDTO);
 
@@ -99,6 +102,18 @@ class PropertyAdminServiceTest {
         
         assertEquals("Descripción actualizada", updatedProperty.getDescription());
         verify(propertyRepository).save(any(Property.class));
+    }
+
+        @Test
+    void testGetPropertyNamesByUserId() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(landlord));
+        when(propertyRepository.findByLandlord(landlord)).thenReturn(Arrays.asList(property));
+
+        List<String> propertyNames = propertyAdminService.getPropertyNamesByUserId(1L);
+        
+        assertFalse(propertyNames.isEmpty());
+        assertEquals("Casa vieja", propertyNames.get(0));
+        verify(propertyRepository).findByLandlord(landlord);
     }
 }
 
