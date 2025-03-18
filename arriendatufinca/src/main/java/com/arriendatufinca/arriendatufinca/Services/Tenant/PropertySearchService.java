@@ -1,13 +1,15 @@
 package com.arriendatufinca.arriendatufinca.Services.Tenant;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import com.arriendatufinca.arriendatufinca.Entities.Property;
 import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
 import com.arriendatufinca.arriendatufinca.Specifications.PropertySpecification;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.data.jpa.domain.Specification;
-import java.util.List;
 
 import lombok.Data;
 
@@ -59,7 +61,8 @@ public class PropertySearchService {
         }
         
         return propertyRepository.findAll(spec);
-    }
+    } 
+
 
     @Data
     public static class PropertySearchCriteria {
