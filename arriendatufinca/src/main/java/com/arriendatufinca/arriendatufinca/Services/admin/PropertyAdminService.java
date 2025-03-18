@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.arriendatufinca.arriendatufinca.DTO.PropertyDTO;
 import com.arriendatufinca.arriendatufinca.Entities.Property;
 import com.arriendatufinca.arriendatufinca.Entities.User;
-import com.arriendatufinca.arriendatufinca.Enums.PropertyStatus;
 import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
 import com.arriendatufinca.arriendatufinca.Repositories.UserRepository;
 @Service
