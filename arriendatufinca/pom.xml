@@ -19,6 +19,12 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<!-- Spring Boot Starters -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -49,6 +55,11 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+   			<groupId>com.jcraft</groupId>
+ 		    <artifactId>jsch</artifactId>
+    		<version>0.1.53</version>
 		</dependency>
 
 		<!-- Testing -->

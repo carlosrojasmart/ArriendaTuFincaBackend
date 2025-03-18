@@ -8,7 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.arriendatufinca.arriendatufinca.Entities.Property;
 import com.arriendatufinca.arriendatufinca.Entities.User;
-import com.arriendatufinca.arriendatufinca.Enums.PropertyStatus;
+import com.arriendatufinca.arriendatufinca.Enums.PropertyState;
+import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
 import com.arriendatufinca.arriendatufinca.Services.Tenant.PropertySearchService;
 
@@ -31,13 +32,13 @@ class PropertySearchServiceTest {
     // Test data
     private static final User TEST_LANDLORD = new User(
         1L, "john_doe", "John", "Doe", 
-        "john@example.com", "password123", true, null, null, null
+        "john@example.com", StatusEnum.ACTIVE, null, null, null
     );
 
     private static final Property TEST_PROPERTY = new Property(
         1L, TEST_LANDLORD, "Beach House", 
         "Luxury beachfront property", 3, 4, 200.0, 
-        "Cancun", "Beach Road", 500.0, PropertyStatus.ACTIVE, 
+        "Cancun", "Beach Road", 500.0,StatusEnum.ACTIVE, PropertyState.ACTIVE, 
         Collections.emptyList(), Collections.emptyList(), Collections.emptyList()
     );
 
@@ -99,7 +100,7 @@ class PropertySearchServiceTest {
         // Assert
         assertFalse(result.isEmpty());
         assertEquals(1, result.size());
-        assertEquals(PropertyStatus.ACTIVE, result.get(0).getStatus());
+        assertEquals(PropertyState.ACTIVE, result.get(0).getStatus());
         verify(propertyRepository, times(1)).findAll(any(Specification.class));
     }
 
@@ -128,7 +129,7 @@ class PropertySearchServiceTest {
         Property inactiveProperty = new Property(
             2L, TEST_LANDLORD, "Mountain Cabin", 
             "Cozy cabin in the mountains", 2, 3, 150.0, 
-            "Alps", "Mountain Road", 300.0, PropertyStatus.INACTIVE, 
+            "Alps", "Mountain Road", 300.0, StatusEnum.ACTIVE, PropertyState.INACTIVE, 
             Collections.emptyList(), Collections.emptyList(), Collections.emptyList()
         );
 

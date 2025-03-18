@@ -1,6 +1,6 @@
 package com.arriendatufinca.arriendatufinca.Enums;
 
-public enum PaymentStatus {
+public enum PaymentState {
     PENDING,
     COMPLETED,
     FAILED
