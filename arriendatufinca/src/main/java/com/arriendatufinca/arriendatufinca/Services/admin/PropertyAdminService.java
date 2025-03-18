@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.arriendatufinca.arriendatufinca.DTO.PropertyDTO;
 import com.arriendatufinca.arriendatufinca.Entities.Property;
 import com.arriendatufinca.arriendatufinca.Entities.User;
+import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
 import com.arriendatufinca.arriendatufinca.Repositories.UserRepository;
 @Service
@@ -35,7 +36,7 @@ public class PropertyAdminService {
         property.setCity(propertyDTO.getCity());
         property.setAddress(propertyDTO.getAddress());
         property.setPrice(propertyDTO.getPrice());
-        property.setStatus(PropertyStatus.ACTIVE); // Estado por defecto
+        property.setStatus(StatusEnum.ACTIVE); // Estado por defecto
 
         return propertyRepository.save(property);
     }
