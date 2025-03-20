@@ -8,10 +8,10 @@ COPY . /app
 WORKDIR /app
 
 # Otorga permisos de ejecución a mvnw
-RUN chmod +x mvnw
+RUN chmod +x arriendatufinca/mvnw
 
 # Construir el JAR sin ejecutar pruebas
-RUN ./mvnw clean install -DskipTests
+RUN arriendatufinca/mvnw clean install -DskipTests
 
 # Ejecutar la aplicación cuando se inicie el contenedor
 CMD ["java", "-jar", "target/arriendatufinca-0.0.1-SNAPSHOT.jar"]
