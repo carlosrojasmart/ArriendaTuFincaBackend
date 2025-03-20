@@ -2,6 +2,7 @@ package com.arriendatufinca.arriendatufinca.Controllers;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ import com.arriendatufinca.arriendatufinca.Services.admin.PropertyAdminService;
 @RequestMapping("/properties")
 public class PropertyController {
 
-    private final PropertySearchService searchService; 
+    private final PropertySearchService searchService;
     private final PropertyAdminService adminService;
 
     public PropertyController(PropertySearchService searchService, PropertyAdminService adminService) {
@@ -32,18 +33,18 @@ public class PropertyController {
 
     @GetMapping("/search")
     public ResponseEntity<List<Property>> searchProperties(
-        @RequestParam(required = false) String title,
-        @RequestParam(required = false) String description,
-        @RequestParam(required = false) Integer minBathrooms,
-        @RequestParam(required = false) Integer maxBathrooms,
-        @RequestParam(required = false) Integer minBedrooms,
-        @RequestParam(required = false) Integer maxBedrooms,
-        @RequestParam(required = false) Double minArea,
-        @RequestParam(required = false) Double maxArea,
-        @RequestParam(required = false) String city,
-        @RequestParam(required = false) String address,
-        @RequestParam(required = false) Double minPrice,
-        @RequestParam(required = false) Double maxPrice
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) Integer minBathrooms,
+            @RequestParam(required = false) Integer maxBathrooms,
+            @RequestParam(required = false) Integer minBedrooms,
+            @RequestParam(required = false) Integer maxBedrooms,
+            @RequestParam(required = false) Double minArea,
+            @RequestParam(required = false) Double maxArea,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice
     ) {
         PropertySearchService.PropertySearchCriteria criteria = new PropertySearchService.PropertySearchCriteria();
         criteria.setTitle(title);
@@ -61,24 +62,29 @@ public class PropertyController {
 
         List<Property> results = searchService.searchProperties(criteria);
         return ResponseEntity.ok(results);
-    } 
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Property> createProperty(@RequestBody PropertyDTO propertyDTO) {
         Property savedProperty = adminService.createProperty(propertyDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProperty);
-    } 
+    }
 
-     @PutMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Property> updateProperty(@PathVariable Long id, @RequestBody PropertyDTO propertyDTO) {
         Property updatedProperty = adminService.updateProperty(id, propertyDTO);
         return ResponseEntity.ok(updatedProperty);
-    } 
+    }
 
     @GetMapping("/landlord/{id}")
     public ResponseEntity<List<String>> getPropertiesByLandlord(@PathVariable Long id) {
         List<String> propertyNames = adminService.getPropertyNamesByUserId(id);
-        return ResponseEntity.ok(propertyNames);  
+        return ResponseEntity.ok(propertyNames);
     }
 
-
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Property> deactivateProperty(@PathVariable Long id) {
+        Property property = adminService.deactivateProperty(id); // Usa adminService en lugar de propertyAdminService
+        return ResponseEntity.ok(property);
+    }
 }

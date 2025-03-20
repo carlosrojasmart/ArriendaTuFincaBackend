@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.arriendatufinca.arriendatufinca.Enums.PropertyState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,6 +87,13 @@ public class PropertyAdminService {
                 .stream()
                 .map(Property::getTitle) // Extrae solo el título
                 .collect(Collectors.toList());
+    }
+
+    public Property deactivateProperty(Long id) {
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Property not found"));
+        property.setState(PropertyState.INACTIVE); // Cambiar el estado a INACTIVE
+        return propertyRepository.save(property);
     }
     
 }

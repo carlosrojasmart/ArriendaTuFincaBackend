@@ -40,4 +40,10 @@ public class RentalRequestController {
         List<RentalRequest> requests = rentalRequestService.getRequestsForCurrentTenant(tenant);
         return ResponseEntity.ok(requests);
     }
+
+    @GetMapping("/landlord/{landlordId}")
+    public ResponseEntity<List<RentalRequest>> getRentalRequestsForLandlord(@PathVariable Long landlordId) {
+        List<RentalRequest> requests = rentalRequestService.getRequestsForLandlord(landlordId);
+        return ResponseEntity.ok(requests);
+    }
 }

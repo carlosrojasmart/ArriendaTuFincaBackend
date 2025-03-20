@@ -6,6 +6,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import com.arriendatufinca.arriendatufinca.Enums.PropertyState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -114,6 +116,17 @@ class PropertyAdminServiceTest {
         assertFalse(propertyNames.isEmpty());
         assertEquals("Casa vieja", propertyNames.get(0));
         verify(propertyRepository).findByLandlord(landlord);
+    }
+
+    @Test
+    void testDeactivateProperty() {
+        when(propertyRepository.findById(1L)).thenReturn(Optional.of(property));
+        when(propertyRepository.save(any(Property.class))).thenReturn(property);
+
+        Property deactivatedProperty = propertyAdminService.deactivateProperty(1L);
+
+        assertEquals(PropertyState.INACTIVE, deactivatedProperty.getState());
+        verify(propertyRepository).save(any(Property.class));
     }
 }
 

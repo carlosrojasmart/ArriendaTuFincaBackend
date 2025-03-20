@@ -22,4 +22,6 @@ public interface RentalRequestRepository extends JpaRepository<RentalRequest, Lo
     }
     
     boolean existsByTenantAndProperty(User tenant, Property property);
+
+    List<RentalRequest> findByPropertyLandlordId(Long landlordId);
 }

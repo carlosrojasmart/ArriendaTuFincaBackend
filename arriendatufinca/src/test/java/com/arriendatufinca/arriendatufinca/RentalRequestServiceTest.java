@@ -1,5 +1,6 @@
 package com.arriendatufinca.arriendatufinca;
 
+import com.arriendatufinca.arriendatufinca.Entities.Property;
 import com.arriendatufinca.arriendatufinca.Entities.RentalRequest;
 import com.arriendatufinca.arriendatufinca.Entities.User;
 import com.arriendatufinca.arriendatufinca.Repositories.RentalRequestRepository;
@@ -41,5 +42,27 @@ class RentalRequestServiceTest {
         // Assert
         assertEquals(1, result.size());
         assertEquals(tenant.getId(), result.get(0).getTenant().getId());
+    }
+
+    @Test
+    void getRequestsForLandlord_ValidLandlord_ReturnsRequests() {
+        User landlord = new User();
+        landlord.setId(1L);
+
+        Property property = new Property();
+        property.setId(1L);
+        property.setLandlord(landlord);
+
+        RentalRequest request = new RentalRequest();
+        request.setId(1L);
+        request.setProperty(property);
+
+        when(rentalRequestRepository.findByPropertyLandlordId(1L))
+                .thenReturn(List.of(request));
+
+        List<RentalRequest> result = rentalRequestService.getRequestsForLandlord(1L);
+
+        assertEquals(1, result.size());
+        assertEquals(1L, result.get(0).getProperty().getLandlord().getId());
     }
 }

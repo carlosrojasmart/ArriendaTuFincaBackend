@@ -28,4 +28,8 @@ public class RentalRequestService {
     public List<RentalRequest> getRequestsForCurrentTenant(User currentTenant) {
         return rentalRequestRepository.findAllForTenant(currentTenant);
     }
+
+    public List<RentalRequest> getRequestsForLandlord(Long landlordId) {
+        return rentalRequestRepository.findByPropertyLandlordId(landlordId);
+    }
 }
