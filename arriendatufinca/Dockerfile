@@ -8,10 +8,11 @@ WORKDIR /app
 COPY . .
 
 # Otorgar permisos de ejecución al wrapper de Maven
-RUN chmod +x mvnw
+RUN arriendatufinca/mvnw clean install -DskipTests
 
 # Construir el JAR sin ejecutar pruebas
-RUN ./mvnw clean package -DskipTests
+WORKDIR /app/arriendatufinca
+RUN ./mvnw clean install -DskipTests
 
 
 # Ejecutar la aplicación cuando se inicie el contenedor
