@@ -16,7 +16,7 @@ spec:
       imagePullSecrets:
         - name: github-secret
       containers:
-        - name: ArriendaTuFinca
+        - name: proyectoweb
           image: localhost:5000/test:latest
           ports:
             - containerPort: 8080
