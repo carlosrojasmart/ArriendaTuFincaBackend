@@ -4,6 +4,13 @@
             "type": "java",
             "name": "ConnectionTest",
             "request": "launch",
+            "mainClass": "ConnectionTest",
+            "projectName": "arriendatufinca"
+        },
+        {
+            "type": "java",
+            "name": "ConnectionTest",
+            "request": "launch",
             "mainClass": "com.arriendatufinca.arriendatufinca.ConnectionTest",
             "projectName": "arriendatufinca"
         },

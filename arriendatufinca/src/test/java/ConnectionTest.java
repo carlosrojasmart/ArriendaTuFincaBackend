@@ -1,4 +1,6 @@
-package com.arriendatufinca.arriendatufinca;
+
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,20 +8,21 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
+import org.junit.jupiter.api.Test;
+
 import com.arriendatufinca.arriendatufinca.Conections.SshTunnelStarter;
 
 public class ConnectionTest {
 
-    public static void main(String[] args) {
+    @Test
+    public void testConnection() {
 
         SshTunnelStarter sshTunnelStarter = new SshTunnelStarter();
 
         try {
             sshTunnelStarter.init();
-            System.out.println("SSH Tunnel initialized successfully.");
         } catch (Exception e) {
-            e.printStackTrace();
-            return;
+            fail(e.getMessage());
         }
 
         ResourceBundle bundle = ResourceBundle.getBundle("application");
@@ -42,15 +45,13 @@ public class ConnectionTest {
             String insertSQL = "INSERT INTO test (name) VALUES ('John')";
             statement.execute(insertSQL);
 
-            /*
+            
             String dropTableSQL = "DROP TABLE test";
             statement.execute(dropTableSQL);
-            System.out.println("Table dropped successfully.");
-            */
-            
+                       
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            fail(e.getMessage());
         }
     }
 
