@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.arriendatufinca.arriendatufinca.Repositories.UserRepository;
-import com.arriendatufinca.arriendatufinca.Entities.User;
+import com.arriendatufinca.arriendatufinca.Services.UserService;
+import com.arriendatufinca.arriendatufinca.DTO.UserDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,34 +18,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequestMapping("/api/user")
 public class UserController {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @CrossOrigin
     @GetMapping("/{id}")
-    public User get(@PathVariable Long id) throws Exception {
-        return userRepository.findById(id).orElseThrow(() -> new Exception("User not found"));
+    public UserDTO get(@PathVariable Long id) throws Exception {
+        return userService.get(id);
     }
 
     @CrossOrigin
     @GetMapping("/all")
-    public Iterable<User> getAll() {
-        return userRepository.findAll();
+    public Iterable<UserDTO> getAll() {
+        return userService.getAll();
     }
 
     @CrossOrigin
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
-        userRepository.deleteById(id);
+        userService.delete(id);
     }
 
     @CrossOrigin
     @PostMapping("/create")
-    public User create(@RequestParam String username, @RequestParam String name, @RequestParam String lastname, @RequestParam String email) {
-        User user = new User();
-        user.setUsername(username);
-        user.setName(name);
-        user.setLastName(lastname);
-        user.setEmail(email);
-        return userRepository.save(user);
+    public UserDTO create(@RequestParam String username, @RequestParam String name, @RequestParam String lastname, @RequestParam String email) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(username);
+        userDTO.setName(name);
+        userDTO.setLastName(lastname);
+        userDTO.setEmail(email);
+        return userService.save(userDTO);
     }
 }
