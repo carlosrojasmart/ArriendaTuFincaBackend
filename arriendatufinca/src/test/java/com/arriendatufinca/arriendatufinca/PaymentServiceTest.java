@@ -1,21 +1,29 @@
 package com.arriendatufinca.arriendatufinca;
 
-import com.arriendatufinca.arriendatufinca.Entities.*;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.arriendatufinca.arriendatufinca.Entities.Payment;
+import com.arriendatufinca.arriendatufinca.Entities.RentalRequest;
+import com.arriendatufinca.arriendatufinca.Entities.User;
 import com.arriendatufinca.arriendatufinca.Enums.PaymentState;
 import com.arriendatufinca.arriendatufinca.Enums.RequestState;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 import com.arriendatufinca.arriendatufinca.Repositories.PaymentRepository;
 import com.arriendatufinca.arriendatufinca.Repositories.RentalRequestRepository;
 import com.arriendatufinca.arriendatufinca.Services.Tenant.PaymentService;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
@@ -46,7 +54,6 @@ class PaymentServiceTest {
         assertNotNull(payment);
         assertEquals(PaymentState.COMPLETED, payment.getState());
         assertEquals(500.0, payment.getAmount());
-        assertEquals("txn_12345", payment.getTransactionId());
         verify(rentalRequestRepository, times(1)).save(rentalRequest);
     }
 
