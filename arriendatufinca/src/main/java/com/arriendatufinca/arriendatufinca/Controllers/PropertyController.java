@@ -83,7 +83,7 @@ public class PropertyController {
 
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<Property> deactivateProperty(@PathVariable Long id) {
-        Property property = adminService.deactivateProperty(id); // Usa adminService en lugar de propertyAdminService
+        Property property = adminService.deactivateProperty(id);
         return ResponseEntity.ok(property);
     }
 }

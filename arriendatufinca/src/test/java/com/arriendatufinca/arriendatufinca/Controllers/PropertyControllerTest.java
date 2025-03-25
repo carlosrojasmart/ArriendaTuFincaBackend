@@ -54,17 +54,17 @@ class PropertyControllerTest {
 
         User landlord = new User();
         landlord.setId(1L);  // ID del usuario propietario
-        propertyDTO = new PropertyDTO(1L,"Casa grande", "Casa en el centro", 2, 3, 120.0, "Bogotá", "Calle 123", 1000000.0); 
+        propertyDTO = new PropertyDTO(1L,"Casa grande", "Casa en el centro", 2, 3, 120.0, "Bogotá", "Calle 123", 1000000.0);
         property = new Property(1L, landlord, "Casa grande","Casa en el centro",2,3,120.0,"Bogotá","Calle 123",1000000.0,
-                                         StatusEnum.ACTIVE,PropertyState.ACTIVE,new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                StatusEnum.ACTIVE,PropertyState.ACTIVE,new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     @Test
     void testSearchProperties() throws Exception {
         when(searchService.searchProperties(any())).thenReturn(Collections.singletonList(property));
 
-        mockMvc.perform(get("/properties/search")
-                .param("city", "Bogotá"))
+        mockMvc.perform(get("/api/properties/search")
+                        .param("city", "Bogotá"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].title").value("Casa grande"));
@@ -76,9 +76,9 @@ class PropertyControllerTest {
     void testCreateProperty() throws Exception {
         when(adminService.createProperty(any(PropertyDTO.class))).thenReturn(property);
 
-        mockMvc.perform(post("/properties/create")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(propertyDTO)))
+        mockMvc.perform(post("/api/properties/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(propertyDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title").value("Casa grande"));
 
@@ -89,9 +89,9 @@ class PropertyControllerTest {
     void testUpdateProperty() throws Exception {
         when(adminService.updateProperty(eq(1L), any(PropertyDTO.class))).thenReturn(property);
 
-        mockMvc.perform(put("/properties/update/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(propertyDTO)))
+        mockMvc.perform(put("/api/properties/update/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(propertyDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Casa grande"));
 
@@ -102,7 +102,7 @@ class PropertyControllerTest {
     void testGetPropertiesByLandlord() throws Exception {
         when(adminService.getPropertyNamesByUserId(1L)).thenReturn(List.of("Casa grande"));
 
-        mockMvc.perform(get("/properties/landlord/1"))
+        mockMvc.perform(get("/api/properties/landlord/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0]").value("Casa grande"));
@@ -114,7 +114,7 @@ class PropertyControllerTest {
     void testDeactivateProperty() throws Exception {
         when(adminService.deactivateProperty(1L)).thenReturn(property);
 
-        mockMvc.perform(put("/properties/1/deactivate"))
+        mockMvc.perform(put("/api/properties/1/deactivate"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Casa grande"));
 
