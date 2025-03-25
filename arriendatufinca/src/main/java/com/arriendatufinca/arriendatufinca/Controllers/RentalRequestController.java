@@ -1,10 +1,12 @@
 package com.arriendatufinca.arriendatufinca.Controllers;
 
+import com.arriendatufinca.arriendatufinca.DTO.RentalRequestResponseDTO;
 import com.arriendatufinca.arriendatufinca.Entities.*;
 import com.arriendatufinca.arriendatufinca.Services.Tenant.RentalRequestService;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,8 +44,21 @@ public class RentalRequestController {
     }
 
     @GetMapping("/landlord/{landlordId}")
-    public ResponseEntity<List<RentalRequest>> getRentalRequestsForLandlord(@PathVariable Long landlordId) {
+    public ResponseEntity<List<RentalRequestResponseDTO>> getRentalRequestsForLandlord(
+            @PathVariable Long landlordId) {
+
         List<RentalRequest> requests = rentalRequestService.getRequestsForLandlord(landlordId);
-        return ResponseEntity.ok(requests);
+
+        // Mapeo manual a DTO
+        List<RentalRequestResponseDTO> responseDTOs = requests.stream().map(request -> {
+            RentalRequestResponseDTO dto = new RentalRequestResponseDTO();
+            dto.setId(request.getId());
+            dto.setState(request.getState());
+            dto.setCreatedAt(request.getCreatedAt());
+            dto.setPropertyTitle(request.getProperty().getTitle());
+            return dto;
+        }).toList();
+
+        return ResponseEntity.ok(responseDTOs);
     }
 }
