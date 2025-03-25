@@ -78,6 +78,6 @@ public class UserControllerTest {
         doNothing().when(userService).delete(1L);
 
         mockMvc.perform(delete("/api/users/delete/1"))
-                .andExpect(status().isOk()); // Cambiado de 204 a 200 (tu controlador no devuelve ResponseEntity)
+                .andExpect(status().isOk());
     }
 }
