@@ -59,17 +59,33 @@ class PropertyControllerTest {
                 StatusEnum.ACTIVE,PropertyState.ACTIVE,new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
+    @SuppressWarnings("null")
     @Test
-    void testSearchProperties() throws Exception {
-        when(searchService.searchProperties(any())).thenReturn(Collections.singletonList(property));
+    public void searchProperties_ShouldReturnFilteredProperties() {
 
-        mockMvc.perform(get("/api/properties/search")
-                        .param("city", "Bogotá"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(1))
-                .andExpect(jsonPath("$[0].title").value("Casa grande"));
+        PropertySearchCriteriaDTO criteria = new PropertySearchCriteriaDTO();
+        criteria.setCity("Bogotá");
 
-        verify(searchService).searchProperties(any());
+        PropertyDTO property1 = new PropertyDTO();
+        property1.setTitle("Casa en Bogotá");
+        property1.setCity("Bogotá");
+        
+        PropertyDTO property2 = new PropertyDTO();
+        property2.setTitle("Apartamento en Bogotá");
+        property2.setCity("Bogotá");
+
+        List<PropertyDTO> mockResults = Arrays.asList(property1, property2);
+
+        when(propertySearchService.searchProperties(any(PropertySearchCriteriaDTO.class)))
+            .thenReturn(mockResults);
+
+        // Act
+        ResponseEntity<List<PropertyDTO>> response = propertyController.searchProperties(criteria);
+        
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(2, response.getBody().size());
+        assertEquals("Bogotá", response.getBody().get(0).getCity());
     }
 
     @Test
