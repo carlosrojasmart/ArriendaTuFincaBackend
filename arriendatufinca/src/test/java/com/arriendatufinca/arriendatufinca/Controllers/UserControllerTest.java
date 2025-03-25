@@ -51,7 +51,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/api/users/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userDTO)))
-                .andExpect(status().isOk()) 
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("carlos123"));
     }
 
