@@ -1,70 +1,83 @@
 package com.arriendatufinca.arriendatufinca.Controllers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import org.junit.jupiter.api.Test;
-
 import com.arriendatufinca.arriendatufinca.DTO.UserDTO;
-import com.arriendatufinca.arriendatufinca.Entities.User;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.util.Assert;
+import com.arriendatufinca.arriendatufinca.Services.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Arrays;
+import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest(UserController.class)
 public class UserControllerTest {
 
-    UserController userController = new UserController();
-    User user = new User();
-    ModelMapper modelMappper = new ModelMapper();
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Test
-    public void userCreateTest() {
-        try{
-            UserDTO userDTO = userController.create("Test", "Test", "Testson", "Test@testson.com");
-            user = modelMappper.map(userDTO, User.class);
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+    @MockBean
+    private UserService userService;
+
+    private UserDTO userDTO;
+
+    @BeforeEach
+    void setUp() {
+        userDTO = new UserDTO();
+        userDTO.setId(1L);
+        userDTO.setUsername("carlos123");
+        userDTO.setName("Carlos");
+        userDTO.setLastName("Pérez");
+        userDTO.setEmail("carlos@example.com");
     }
 
     @Test
-    public void getUserByIDTest() {
-        try{
-            UserDTO userDTO = userController.get(user.getId());
-            User userTemp = modelMappper.map(userDTO, User.class);
-            assertEquals(user.getId(), userTemp.getId());
-            assertEquals(user.getName(), userTemp.getName());
-            assertEquals(user.getLastName(), userTemp.getLastName());
-            assertEquals(user.getEmail(), userTemp.getEmail());
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+    void userCreateTest() throws Exception {
+        when(userService.save(any(UserDTO.class))).thenReturn(userDTO);
+
+        mockMvc.perform(post("/api/users/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(userDTO)))
+                .andExpect(status().isOk()) // Cambiado de 201 a 200 (ya que tu controlador no devuelve ResponseEntity)
+                .andExpect(jsonPath("$.username").value("carlos123"));
     }
 
     @Test
-    public void getAllUsersTest() {
-        try{
-            Iterable<UserDTO> userDTOs = userController.getAll();
-            for (UserDTO userDTO : userDTOs) {
-                User userTemp = modelMappper.map(userDTO, User.class);
-                assertEquals(user.getId(), userTemp.getId());
-                assertEquals(user.getName(), userTemp.getName());
-                assertEquals(user.getLastName(), userTemp.getLastName());
-                assertEquals(user.getEmail(), userTemp.getEmail());
-            }
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+    void getUserByIDTest() throws Exception {
+        when(userService.get(1L)).thenReturn(userDTO);
+
+        mockMvc.perform(get("/api/users/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Carlos"));
     }
 
     @Test
-    public void deleteUserTest() {
-        try{
-            userController.delete(user.getId());
-            UserDTO userDTO = userController.get(user.getId());
-            Assert.isNull(userDTO);
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+    void getAllUsersTest() throws Exception {
+        when(userService.getAll()).thenReturn(List.of(userDTO));
+
+        mockMvc.perform(get("/api/users/all"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].email").value("carlos@example.com"));
+    }
+
+    @Test
+    void deleteUserTest() throws Exception {
+        doNothing().when(userService).delete(1L);
+
+        mockMvc.perform(delete("/api/users/delete/1"))
+                .andExpect(status().isOk()); // Cambiado de 204 a 200 (tu controlador no devuelve ResponseEntity)
     }
 }
