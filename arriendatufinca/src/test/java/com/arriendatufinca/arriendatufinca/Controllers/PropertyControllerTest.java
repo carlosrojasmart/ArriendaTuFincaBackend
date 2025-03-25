@@ -1,11 +1,15 @@
 package com.arriendatufinca.arriendatufinca.Controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.arriendatufinca.arriendatufinca.DTO.PropertySearchCriteriaDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
@@ -13,8 +17,13 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
+import static org.springframework.test.util.AssertionErrors.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -62,30 +71,31 @@ class PropertyControllerTest {
     @SuppressWarnings("null")
     @Test
     public void searchProperties_ShouldReturnFilteredProperties() {
-
+        // Arrange
         PropertySearchCriteriaDTO criteria = new PropertySearchCriteriaDTO();
         criteria.setCity("Bogotá");
 
         PropertyDTO property1 = new PropertyDTO();
         property1.setTitle("Casa en Bogotá");
         property1.setCity("Bogotá");
-        
+
         PropertyDTO property2 = new PropertyDTO();
         property2.setTitle("Apartamento en Bogotá");
         property2.setCity("Bogotá");
 
         List<PropertyDTO> mockResults = Arrays.asList(property1, property2);
 
-        when(propertySearchService.searchProperties(any(PropertySearchCriteriaDTO.class)))
-            .thenReturn(mockResults);
+        when(searchService.searchProperties(any(PropertySearchCriteriaDTO.class)))
+                .thenReturn(mockResults);
 
         // Act
         ResponseEntity<List<PropertyDTO>> response = propertyController.searchProperties(criteria);
-        
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(2, response.getBody().size());
-        assertEquals("Bogotá", response.getBody().get(0).getCity());
+
+        // Assert
+        assertNotNull(response, "La respuesta no debería ser nula");
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "El código de estado debería ser 200 OK");
+        assertEquals(2, response.getBody().size(), "Deberían retornarse 2 propiedades");
+        assertEquals("Bogotá", response.getBody().get(0).getCity(), "La primera propiedad debería estar en Bogotá");
     }
 
     @Test
