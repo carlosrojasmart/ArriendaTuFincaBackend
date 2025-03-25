@@ -1,4 +1,4 @@
-package com.arriendatufinca.arriendatufinca;
+package com.arriendatufinca.arriendatufinca.Services.Tenant;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,7 +21,6 @@ import com.arriendatufinca.arriendatufinca.Entities.User;
 import com.arriendatufinca.arriendatufinca.Enums.PropertyState;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
-import com.arriendatufinca.arriendatufinca.Services.Tenant.PropertySearchService;
 
 @ExtendWith(MockitoExtension.class)
 class PropertySearchServiceTest {

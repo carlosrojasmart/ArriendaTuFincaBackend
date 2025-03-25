@@ -1,8 +1,12 @@
 package com.arriendatufinca.arriendatufinca.DTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PropertyDTO {
     private Long landlordId;
     private String title;

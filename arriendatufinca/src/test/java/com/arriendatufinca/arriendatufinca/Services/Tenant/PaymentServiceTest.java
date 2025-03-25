@@ -1,4 +1,4 @@
-package com.arriendatufinca.arriendatufinca;
+package com.arriendatufinca.arriendatufinca.Services.Tenant;
 
 import java.util.Optional;
 
@@ -23,7 +23,6 @@ import com.arriendatufinca.arriendatufinca.Enums.RequestState;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 import com.arriendatufinca.arriendatufinca.Repositories.PaymentRepository;
 import com.arriendatufinca.arriendatufinca.Repositories.RentalRequestRepository;
-import com.arriendatufinca.arriendatufinca.Services.Tenant.PaymentService;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
