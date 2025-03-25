@@ -2,14 +2,12 @@ package com.arriendatufinca.arriendatufinca.Controllers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import com.arriendatufinca.arriendatufinca.DTO.PropertySearchCriteriaDTO;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
@@ -21,9 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
-import static org.springframework.test.util.AssertionErrors.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -32,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.arriendatufinca.arriendatufinca.DTO.PropertyDTO;
+import com.arriendatufinca.arriendatufinca.DTO.PropertySearchCriteriaDTO;
 import com.arriendatufinca.arriendatufinca.Entities.Property;
 import com.arriendatufinca.arriendatufinca.Entities.User;
 import com.arriendatufinca.arriendatufinca.Enums.PropertyState;
@@ -89,7 +85,7 @@ class PropertyControllerTest {
                 .thenReturn(mockResults);
 
         // Act
-        ResponseEntity<List<PropertyDTO>> response = propertyController.searchProperties(criteria);
+        ResponseEntity<List<PropertyDTO>> response = propertyController.searchProperties(criteria); 
 
         // Assert
         assertNotNull(response, "La respuesta no debería ser nula");
