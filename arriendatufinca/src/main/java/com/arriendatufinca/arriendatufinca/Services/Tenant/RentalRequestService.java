@@ -32,4 +32,21 @@ public class RentalRequestService {
     public List<RentalRequest> getRequestsForLandlord(Long landlordId) {
         return rentalRequestRepository.findByPropertyLandlordId(landlordId);
     }
+
+    @Transactional
+    public RentalRequest approveRentalRequest(Long rentalRequestId) {
+        RentalRequest rentalRequest = rentalRequestRepository.findById(rentalRequestId)
+                .orElseThrow(() -> new RuntimeException("Solicitud de arriendo no encontrada"));
+        rentalRequest.setState(RequestState.APPROVED);
+        return rentalRequestRepository.save(rentalRequest);
+    }
+  
+    @Transactional
+public RentalRequest rejectRentalRequest(Long rentalRequestId) {
+    RentalRequest rentalRequest = rentalRequestRepository.findById(rentalRequestId)
+            .orElseThrow(() -> new RuntimeException("Solicitud de arriendo no encontrada"));
+    rentalRequest.setState(RequestState.REJECTED);
+    return rentalRequestRepository.save(rentalRequest);
+}
+
 }

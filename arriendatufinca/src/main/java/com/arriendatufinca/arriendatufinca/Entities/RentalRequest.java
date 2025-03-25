@@ -44,4 +44,18 @@ public class RentalRequest {
     private StatusEnum status = StatusEnum.ACTIVE;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+    public Rating rateProperty(Long requestId, int score, String comment) {
+        RentalRequest request = rentalRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Rental request not found"));
+    
+        Rating rating = new Rating();
+        rating.setRequest(request);
+        rating.setScore(score);
+        rating.setComment(comment);
+        rating.setType(RatingType.FOR_PROPERTY);  
+        rating.setDate(LocalDateTime.now());
+    
+        return ratingRepository.save(rating);
+    }
+    
 }

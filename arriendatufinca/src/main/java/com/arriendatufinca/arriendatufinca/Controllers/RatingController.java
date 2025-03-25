@@ -24,4 +24,20 @@ public class RatingController {
         Rating rating = ratingService.rateLandlord(requestId, score, comment);
         return ResponseEntity.ok(rating);
     }
+    @PostMapping("/rental-requests/{id}/rate-tenant")
+    public ResponseEntity<Rating> rateTenant(
+            @PathVariable Long id,
+            @RequestParam int score,
+            @RequestParam(required = false) String comment) {
+        Rating rating = ratingService.rateTenant(id, score, comment);
+        return ResponseEntity.ok(rating);
+    }
+@PostMapping("/rental-requests/{id}/rate-property")
+public ResponseEntity<Rating> rateProperty(
+        @PathVariable Long id,
+        @RequestParam int score,
+        @RequestParam(required = false) String comment) {
+    Rating rating = ratingService.rateProperty(id, score, comment);
+    return ResponseEntity.ok(rating);
+        }
 }
