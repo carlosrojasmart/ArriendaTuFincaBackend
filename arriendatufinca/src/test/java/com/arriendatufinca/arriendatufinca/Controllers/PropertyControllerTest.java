@@ -1,5 +1,6 @@
 package com.arriendatufinca.arriendatufinca.Controllers;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -121,3 +122,4 @@ class PropertyControllerTest {
         verify(adminService).deactivateProperty(1L);
     }
 }
+

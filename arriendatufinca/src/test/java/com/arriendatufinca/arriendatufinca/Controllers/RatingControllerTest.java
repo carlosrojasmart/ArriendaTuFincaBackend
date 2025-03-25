@@ -84,3 +84,4 @@ class RatingControllerTest {
         verify(ratingService).rateProperty(any(RatingDTO.class));
     }
 }
+
