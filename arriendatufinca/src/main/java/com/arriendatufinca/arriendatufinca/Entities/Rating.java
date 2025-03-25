@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+
 
 import com.arriendatufinca.arriendatufinca.Enums.RatingType;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
@@ -24,7 +25,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Where(clause = "status = 0") // Filtra solo los registros activos
+@Filter(name = "statusFilter", condition = "status = 0") // Filtra solo los registros activos
 @SQLDelete(sql = "UPDATE rating SET status = 1 WHERE id=?") // Borrado lógico
 @Table(name = "rating")
 public class Rating {
