@@ -8,7 +8,16 @@ import org.hibernate.annotations.Where;
 import com.arriendatufinca.arriendatufinca.Enums.RequestState;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -44,18 +53,6 @@ public class RentalRequest {
     private StatusEnum status = StatusEnum.ACTIVE;
 
     private LocalDateTime createdAt = LocalDateTime.now();
-    public Rating rateProperty(Long requestId, int score, String comment) {
-        RentalRequest request = rentalRequestRepository.findById(requestId)
-                .orElseThrow(() -> new RuntimeException("Rental request not found"));
-    
-        Rating rating = new Rating();
-        rating.setRequest(request);
-        rating.setScore(score);
-        rating.setComment(comment);
-        rating.setType(RatingType.FOR_PROPERTY);  
-        rating.setDate(LocalDateTime.now());
-    
-        return ratingRepository.save(rating);
-    }
+
     
 }
