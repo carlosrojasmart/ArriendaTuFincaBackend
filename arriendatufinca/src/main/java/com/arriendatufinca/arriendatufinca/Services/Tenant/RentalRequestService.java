@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.arriendatufinca.arriendatufinca.Entities.Property;
 import com.arriendatufinca.arriendatufinca.Entities.RentalRequest;
 import com.arriendatufinca.arriendatufinca.Entities.User;
+import com.arriendatufinca.arriendatufinca.Enums.RequestState;
 import com.arriendatufinca.arriendatufinca.Repositories.RentalRequestRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -32,4 +33,23 @@ public class RentalRequestService {
     public List<RentalRequest> getRequestsForLandlord(Long landlordId) {
         return rentalRequestRepository.findByPropertyLandlordId(landlordId);
     }
+
+
+    public RentalRequest approveRentalRequest(Long rentalRequestId) {
+        RentalRequest rentalRequest = rentalRequestRepository.findById(rentalRequestId)
+                .orElseThrow(() -> new RuntimeException("Solicitud de arriendo no encontrada"));
+        rentalRequest.setState(RequestState.APPROVED);
+        return rentalRequestRepository.save(rentalRequest);
+    }
+  
+
+public RentalRequest rejectRentalRequest(Long rentalRequestId) {
+    RentalRequest rentalRequest = rentalRequestRepository.findById(rentalRequestId)
+            .orElseThrow(() -> new RuntimeException("Solicitud de arriendo no encontrada"));
+    rentalRequest.setState(RequestState.REJECTED);
+    return rentalRequestRepository.save(rentalRequest);
+}
+
+
+
 }

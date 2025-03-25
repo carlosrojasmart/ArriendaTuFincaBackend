@@ -49,7 +49,7 @@ public class Rating {
     private StatusEnum status = StatusEnum.ACTIVE; // Estado de la calificación (ACTIVE o DELETED)
 
     @Enumerated(EnumType.STRING) // Mapea el enum como una cadena en la base de datos
-    private RatingType type; // Tipo de calificación (FOR_LANDLORD o FOR_TENANT)
+    private RatingType type; // Tipo de calificación (FOR_LANDLORD o FOR_TENANT o FOR_PROPERTY)
 
     @PrePersist
     protected void onCreate() {
