@@ -51,7 +51,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/api/users/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userDTO)))
-                .andExpect(status().isOk()) // Cambiado de 201 a 200 (ya que tu controlador no devuelve ResponseEntity)
+                .andExpect(status().isOk()) 
                 .andExpect(jsonPath("$.username").value("carlos123"));
     }
 
