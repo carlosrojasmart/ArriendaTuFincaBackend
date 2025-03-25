@@ -1,13 +1,15 @@
 package com.arriendatufinca.arriendatufinca.Controllers;
 
-import com.arriendatufinca.arriendatufinca.Entities.Rating;
-import com.arriendatufinca.arriendatufinca.Services.Tenant.RatingService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.arriendatufinca.arriendatufinca.DTO.RatingDTO;
+import com.arriendatufinca.arriendatufinca.Services.Tenant.RatingService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/ratings")
@@ -15,13 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class RatingController {
     private final RatingService ratingService;
 
-    @PostMapping("/rate-landlord")
-    public ResponseEntity<Rating> rateLandlord(
-            @RequestParam Long requestId,
-            @RequestParam int score,
-            @RequestParam String comment
-    ) {
-        Rating rating = ratingService.rateLandlord(requestId, score, comment);
-        return ResponseEntity.ok(rating);
+    @PostMapping("/landlord")
+    public ResponseEntity<RatingDTO> rateLandlord(@RequestBody RatingDTO ratingDTO) {
+        RatingDTO savedRating = ratingService.rateLandlord(ratingDTO);
+        return ResponseEntity.ok(savedRating);
+    }
+
+    @PostMapping("/tenant")
+    public ResponseEntity<RatingDTO> rateTenant(@RequestBody RatingDTO ratingDTO) {
+        RatingDTO savedRating = ratingService.rateTenant(ratingDTO);
+        return ResponseEntity.ok(savedRating);
+    }
+
+    @PostMapping("/property")
+    public ResponseEntity<RatingDTO> rateProperty(@RequestBody RatingDTO ratingDTO) {
+        RatingDTO savedRating = ratingService.rateProperty(ratingDTO);
+        return ResponseEntity.ok(savedRating);
     }
 }

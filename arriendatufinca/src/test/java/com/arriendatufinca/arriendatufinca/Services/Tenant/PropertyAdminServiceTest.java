@@ -1,4 +1,4 @@
-package com.arriendatufinca.arriendatufinca;
+package com.arriendatufinca.arriendatufinca.Services.Tenant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -6,8 +6,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import com.arriendatufinca.arriendatufinca.Enums.PropertyState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.arriendatufinca.arriendatufinca.DTO.PropertyDTO;
 import com.arriendatufinca.arriendatufinca.Entities.Property;
 import com.arriendatufinca.arriendatufinca.Entities.User;
+import com.arriendatufinca.arriendatufinca.Enums.PropertyState;
 import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
 import com.arriendatufinca.arriendatufinca.Repositories.UserRepository;
 import com.arriendatufinca.arriendatufinca.Services.admin.PropertyAdminService;

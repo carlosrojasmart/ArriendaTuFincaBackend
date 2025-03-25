@@ -46,4 +46,13 @@ public class RentalRequestController {
         List<RentalRequest> requests = rentalRequestService.getRequestsForLandlord(landlordId);
         return ResponseEntity.ok(requests);
     }
+    @PutMapping("/rental-requests/{id}/approve")
+    public ResponseEntity<RentalRequest> approveRentalRequest(@PathVariable Long id) {
+        return ResponseEntity.ok(rentalRequestService.approveRentalRequest(id));
+    }
+    
+    @PutMapping("/rental-requests/{id}/reject")
+    public ResponseEntity<RentalRequest> rejectRentalRequest(@PathVariable Long id) {
+        return ResponseEntity.ok(rentalRequestService.rejectRentalRequest(id));
+    }
 }

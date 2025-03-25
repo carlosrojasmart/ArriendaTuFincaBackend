@@ -1,22 +1,31 @@
 package com.arriendatufinca.arriendatufinca.Entities;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.SQLDelete;
+
+import com.arriendatufinca.arriendatufinca.Enums.RatingType;
+import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-
-import com.arriendatufinca.arriendatufinca.Enums.RatingType;
-import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -24,7 +33,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Where(clause = "status = 0") // Filtra solo los registros activos
+@Filter(name = "statusFilter", condition = "status = 0") // Filtra solo los registros activos
 @SQLDelete(sql = "UPDATE rating SET status = 1 WHERE id=?") // Borrado lógico
 @Table(name = "rating")
 public class Rating {
@@ -48,7 +57,7 @@ public class Rating {
     private StatusEnum status = StatusEnum.ACTIVE; // Estado de la calificación (ACTIVE o DELETED)
 
     @Enumerated(EnumType.STRING) // Mapea el enum como una cadena en la base de datos
-    private RatingType type; // Tipo de calificación (FOR_LANDLORD o FOR_TENANT)
+    private RatingType type; // Tipo de calificación (FOR_LANDLORD o FOR_TENANT o FOR_PROPERTY)
 
     @PrePersist
     protected void onCreate() {

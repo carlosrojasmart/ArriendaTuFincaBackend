@@ -2,8 +2,8 @@ package com.arriendatufinca.arriendatufinca.Entities;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import com.arriendatufinca.arriendatufinca.Enums.PaymentState;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
@@ -28,7 +28,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Where(clause = "status = 0")
+@Filter(name = "statusFilter", condition = "status = 0")
 @SQLDelete(sql = "UPDATE photo SET status = 1 WHERE id=?")
 @Table(name = "payments")
 public class Payment {

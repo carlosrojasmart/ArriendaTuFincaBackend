@@ -1,35 +1,42 @@
-package com.arriendatufinca.arriendatufinca;
-
+import static org.junit.jupiter.api.Assertions.fail;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
+import org.junit.jupiter.api.Test;
+
 import com.arriendatufinca.arriendatufinca.Conections.SshTunnelStarter;
 
+/*
+* Esta clase se encarga de probar la conexión a la base de datos a través de un tunel ssh y verifica que se puedan realizar las operaciones básicas CRUD
+ */
 public class ConnectionTest {
 
-    public static void main(String[] args) {
+    /*
+     * Este método se encarga de probar la conexión a la base de datos y verifica que se puedan realizar las operaciones básicas CRUD
+     */
+    @Test
+    public void testConnection() {
 
         SshTunnelStarter sshTunnelStarter = new SshTunnelStarter();
 
+        //Se inicializa el tunel ssh
         try {
             sshTunnelStarter.init();
-            System.out.println("SSH Tunnel initialized successfully.");
         } catch (Exception e) {
-            e.printStackTrace();
-            return;
+            fail(e.getMessage());
         }
 
+        //Se obtienen las credenciales de la base de datos
         ResourceBundle bundle = ResourceBundle.getBundle("application");
 		String username = bundle.getString("spring.datasource.username");
 		String password = bundle.getString("spring.datasource.password");
 
+        //Se realiza la conexión a la base de datos, se crea una tabla, se inserta un registro y se elimina la tabla
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/test", username, password);
              Statement statement = connection.createStatement()) {
-
-            System.out.println("Database connection established successfully.");
 
             String createTableSQL = "CREATE TABLE IF NOT EXISTS test ("
                     + "id INT NOT NULL AUTO_INCREMENT, "
@@ -37,20 +44,17 @@ public class ConnectionTest {
                     + "PRIMARY KEY (id))";
 
             statement.execute(createTableSQL);
-            System.out.println("Table created successfully.");
 
             String insertSQL = "INSERT INTO test (name) VALUES ('John')";
             statement.execute(insertSQL);
 
-            /*
+            
             String dropTableSQL = "DROP TABLE test";
             statement.execute(dropTableSQL);
-            System.out.println("Table dropped successfully.");
-            */
-            
+                       
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            fail(e.getMessage());
         }
     }
 

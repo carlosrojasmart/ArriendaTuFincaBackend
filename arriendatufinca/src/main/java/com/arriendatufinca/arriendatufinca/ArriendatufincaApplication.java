@@ -20,13 +20,13 @@ public class ArriendatufincaApplication {
     }
 
     @Bean(initMethod = "init", destroyMethod = "shutdown")
-    public SshTunnelStarter sshTunnelStarter() {
+    SshTunnelStarter sshTunnelStarter() {
         return new SshTunnelStarter();
     }
 
     @Bean
     @DependsOn("sshTunnelStarter")
-    public DataSource dataSource() {
+    DataSource dataSource() {
 		ResourceBundle bundle = ResourceBundle.getBundle("application");
 		String url = bundle.getString("spring.datasource.url");
 		String username = bundle.getString("spring.datasource.username");
