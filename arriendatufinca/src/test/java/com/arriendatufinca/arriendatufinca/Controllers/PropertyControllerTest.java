@@ -80,10 +80,9 @@ class PropertyControllerTest {
         property2.setCity("Bogotá");
 
         List<PropertyDTO> mockResults = Arrays.asList(property1, property2);
-
-        when(searchService.searchProperties(any(PropertySearchCriteriaDTO.class)))
-                .thenReturn(mockResults);
-
+ 
+        when(searchService.searchProperties(any()));
+ 
         // Act
         ResponseEntity<List<PropertyDTO>> response = propertyController.searchProperties(criteria); 
 
