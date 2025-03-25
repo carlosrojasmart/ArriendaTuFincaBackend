@@ -1,28 +1,39 @@
 package com.arriendatufinca.arriendatufinca.Services.Tenant;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.arriendatufinca.arriendatufinca.DTO.PropertyDTO;
+import com.arriendatufinca.arriendatufinca.DTO.PropertySearchCriteriaDTO;
+import com.arriendatufinca.arriendatufinca.Entities.Property;
+import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
+import com.arriendatufinca.arriendatufinca.Specifications.PropertySpecification;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.arriendatufinca.arriendatufinca.Entities.Property;
-import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
-import com.arriendatufinca.arriendatufinca.Specifications.PropertySpecification;
-
-import lombok.Data;
-
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PropertySearchService {
 
-    @Autowired
-    private PropertyRepository propertyRepository;
+    private final PropertyRepository propertyRepository;
+    private final ModelMapper modelMapper;
 
-    public List<Property> searchProperties(PropertySearchCriteria criteria) {
+    public List<PropertyDTO> searchProperties(PropertySearchCriteriaDTO criteria) {
+        Specification<Property> spec = buildSpecification(criteria);
+        List<Property> properties = propertyRepository.findAll(spec);
+        
+        return properties.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private Specification<Property> buildSpecification(PropertySearchCriteriaDTO criteria) {
         Specification<Property> spec = Specification.where(null);
         
+        // Condiciones de búsqueda originales adaptadas al DTO
         if (StringUtils.hasText(criteria.getTitle())) {
             spec = spec.and(PropertySpecification.withTitle(criteria.getTitle()));
         }
@@ -60,23 +71,15 @@ public class PropertySearchService {
             spec = spec.and(PropertySpecification.withMaxPrice(criteria.getMaxPrice()));
         }
         
-        return propertyRepository.findAll(spec);
-    } 
+        return spec;
+    }
 
+    private PropertyDTO convertToDTO(Property property) {
+        PropertyDTO dto = modelMapper.map(property, PropertyDTO.class);
+        dto.setLandlordId(property.getLandlord().getId());
+        return dto;
+    }
 
-    @Data
-    public static class PropertySearchCriteria {
-        private String title;
-        private String description;
-        private Integer minBathrooms;
-        private Integer maxBathrooms;
-        private Integer minBedrooms;
-        private Integer maxBedrooms;
-        private Double minArea;
-        private Double maxArea;
-        private String city;
-        private String address;
-        private Double minPrice;
-        private Double maxPrice;
+    public class PropertySearchCriteria {
     }
 }
