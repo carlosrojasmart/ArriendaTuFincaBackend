@@ -1,16 +1,18 @@
 package com.arriendatufinca.arriendatufinca.Services.admin;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.arriendatufinca.arriendatufinca.Enums.PropertyState;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arriendatufinca.arriendatufinca.DTO.PropertyDTO;
 import com.arriendatufinca.arriendatufinca.Entities.Property;
 import com.arriendatufinca.arriendatufinca.Entities.User;
+import com.arriendatufinca.arriendatufinca.Enums.PropertyState;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
 import com.arriendatufinca.arriendatufinca.Repositories.UserRepository;
@@ -20,80 +22,76 @@ public class PropertyAdminService {
     @Autowired
     private PropertyRepository propertyRepository; 
     private UserRepository userRepository;
+
+    @Autowired
+    ModelMapper modelMapper;
  
-    public Property createProperty(PropertyDTO propertyDTO) { 
-        // Buscar el propietario en la base de datos
-        User landlord = userRepository.findById(propertyDTO.getLandlordId())
-                .orElseThrow(() -> new RuntimeException("Landlord not found"));
-
-        // Llenamos el objeto Property
-        Property property = new Property(); 
-        property.setLandlord(landlord);
-        property.setTitle(propertyDTO.getTitle());
-        property.setDescription(propertyDTO.getDescription()); 
-        property.setBathrooms(propertyDTO.getBathrooms());
-        property.setBedrooms(propertyDTO.getBedrooms());
-        property.setArea(propertyDTO.getArea());
-        property.setCity(propertyDTO.getCity());
-        property.setAddress(propertyDTO.getAddress());
-        property.setPrice(propertyDTO.getPrice());
-        property.setStatus(StatusEnum.ACTIVE); // Estado por defecto
-
-        return propertyRepository.save(property);
+    public PropertyDTO createProperty(PropertyDTO propertyDTO) { 
+        try {
+            System.out.println("Recibiendo DTO: " + propertyDTO);
+    
+            // Buscar el propietario en la base de datos
+            User landlord = userRepository.findById(propertyDTO.getLandlordId())
+                    .orElseThrow(() -> new RuntimeException("Landlord not found"));
+            System.out.println("Propietario encontrado: " + landlord);
+    
+            // Mapear DTO a entidad
+            Property property = modelMapper.map(propertyDTO, Property.class); 
+            System.out.println("Propiedad mapeada: " + property);
+    
+            property.setLandlord(landlord);
+            property.setStatus(StatusEnum.ACTIVE); // Estado por defecto 
+    
+            // Guardar en la base de datos
+            System.out.println("Guardando propiedad...");
+            Property savedProperty = propertyRepository.save(property);
+            System.out.println("Propiedad guardada con ID: " + savedProperty.getId());
+    
+            // Mapear de vuelta a DTO y devolver
+            PropertyDTO savedPropertyDTO = modelMapper.map(savedProperty, PropertyDTO.class);
+            savedPropertyDTO.setId(savedProperty.getId());
+            return savedPropertyDTO;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error guardando propiedad: " + e.getMessage());
+        }
     }
 
-     public Property updateProperty(Long propertyId, PropertyDTO propertyDTO) {
-        // Buscar la propiedad en la base de datos
+    public PropertyDTO updateProperty(Long propertyId, PropertyDTO propertyDTO) {
         Property existingProperty = propertyRepository.findById(propertyId)
                 .orElseThrow(() -> new RuntimeException("Property not found"));
-
-        // Verificar y actualizar solo los campos diferentes
-        if (!Objects.equals(existingProperty.getTitle(), propertyDTO.getTitle())) {
-            existingProperty.setTitle(propertyDTO.getTitle());
-        }
-        if (!Objects.equals(existingProperty.getDescription(), propertyDTO.getDescription())) {
-            existingProperty.setDescription(propertyDTO.getDescription());
-        }
-        if (existingProperty.getBathrooms() != propertyDTO.getBathrooms()) {
-            existingProperty.setBathrooms(propertyDTO.getBathrooms());
-        }
-        if (existingProperty.getBedrooms() != propertyDTO.getBedrooms()) {
-            existingProperty.setBedrooms(propertyDTO.getBedrooms());
-        }
-        if (existingProperty.getArea() != propertyDTO.getArea()) {
-            existingProperty.setArea(propertyDTO.getArea());
-        }
-        if (!Objects.equals(existingProperty.getCity(), propertyDTO.getCity())) {
-            existingProperty.setCity(propertyDTO.getCity());
-        }
-        if (!Objects.equals(existingProperty.getAddress(), propertyDTO.getAddress())) {
-            existingProperty.setAddress(propertyDTO.getAddress());
-        }
-        if (existingProperty.getPrice() != propertyDTO.getPrice()) {
-            existingProperty.setPrice(propertyDTO.getPrice());
-        }
-
-        // Guardar los cambios en la base de datos
-        return propertyRepository.save(existingProperty);
-    } 
-
+    
+        modelMapper.map(propertyDTO, existingProperty); // Mapea los cambios al objeto existente
+    
+        Property updatedProperty = propertyRepository.save(existingProperty);
+        return modelMapper.map(updatedProperty, PropertyDTO.class);
+    }
+    
     public List<String> getPropertyNamesByUserId(Long landlordId) {
-        // Buscar el usuario en la base de datos  
+        if (landlordId == null) {
+            throw new IllegalArgumentException("El ID del propietario no puede ser nulo");
+        }
+    
         User landlord = userRepository.findById(landlordId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
-        // Obtener todas las propiedades del usuario y extraer solo los nombres
-        return propertyRepository.findByLandlord(landlord)
-                .stream()
-                .map(Property::getTitle) // Extrae solo el título
+    
+        List<Property> properties = Optional.ofNullable(propertyRepository.findByLandlord(landlord))
+                .orElse(Collections.emptyList());
+    
+        return properties.stream()
+                .map(Property::getTitle)
                 .collect(Collectors.toList());
     }
 
-    public Property deactivateProperty(Long id) {
+
+    
+    public PropertyDTO deactivateProperty(Long id) {
         Property property = propertyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Property not found"));
-        property.setState(PropertyState.INACTIVE); // Cambiar el estado a INACTIVE
-        return propertyRepository.save(property);
-    }
     
+        property.setState(PropertyState.INACTIVE);
+        Property updatedProperty = propertyRepository.save(property);
+    
+        return modelMapper.map(updatedProperty, PropertyDTO.class);
+    }
 }
