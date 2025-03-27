@@ -42,6 +42,7 @@ public class PropertyAdminService {
     
             property.setLandlord(landlord);
             property.setStatus(StatusEnum.ACTIVE); // Estado por defecto 
+            property.setState(PropertyState.ACTIVE); // Estado por defecto 
     
             // Guardar en la base de datos
             System.out.println("Guardando propiedad...");
