@@ -1,13 +1,19 @@
 package com.arriendatufinca.arriendatufinca.Controllers;
 
-import com.arriendatufinca.arriendatufinca.DTO.RentalRequestResponseDTO;
-import com.arriendatufinca.arriendatufinca.Entities.*;
-import com.arriendatufinca.arriendatufinca.Services.Tenant.RentalRequestService;
-
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.arriendatufinca.arriendatufinca.DTO.RentalRequestDTO;
+import com.arriendatufinca.arriendatufinca.Services.Tenant.RentalRequestService;
 
 @RestController
 @RequestMapping("/api/rental-requests")
@@ -18,55 +24,33 @@ public class RentalRequestController {
         this.rentalRequestService = rentalRequestService;
     }
 
-    @PostMapping
-    public ResponseEntity<RentalRequest> createRentalRequest(
-        @RequestParam Long tenantId,
-        @RequestParam Long propertyId
-    ) {
-        User tenant = new User();
-        tenant.setId(tenantId);
-
-        Property property = new Property();
-        property.setId(propertyId);
-
-        RentalRequest rentalRequest = rentalRequestService.createRentalRequest(tenant, property);
-        return ResponseEntity.ok(rentalRequest);
+    @PostMapping("/create")
+    public ResponseEntity<RentalRequestDTO> createRentalRequest(@RequestBody RentalRequestDTO rentalRequestDTO) {
+        RentalRequestDTO createdRequest = rentalRequestService.createRentalRequest(rentalRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdRequest);
     }
 
-    @GetMapping
-    public ResponseEntity<List<RentalRequest>> getRentalRequests(@RequestParam Long tenantId) {
-        User tenant = new User();
-        tenant.setId(tenantId);
-
-        List<RentalRequest> requests = rentalRequestService.getRequestsForCurrentTenant(tenant);
+    @GetMapping("/tenant/{tenantId}")
+    public ResponseEntity<List<RentalRequestDTO>> getRequestsForTenant(@PathVariable Long tenantId) {
+        List<RentalRequestDTO> requests = rentalRequestService.getRequestsForCurrentTenant(tenantId);
         return ResponseEntity.ok(requests);
     }
 
     @GetMapping("/landlord/{landlordId}")
-    public ResponseEntity<List<RentalRequestResponseDTO>> getRentalRequestsForLandlord(
-            @PathVariable Long landlordId) {
-
-        List<RentalRequest> requests = rentalRequestService.getRequestsForLandlord(landlordId);
-
-        // Mapeo manual a DTO
-        List<RentalRequestResponseDTO> responseDTOs = requests.stream().map(request -> {
-            RentalRequestResponseDTO dto = new RentalRequestResponseDTO();
-            dto.setId(request.getId());
-            dto.setState(request.getState());
-            dto.setCreatedAt(request.getCreatedAt());
-            dto.setPropertyTitle(request.getProperty().getTitle());
-            return dto;
-        }).toList();
-
-        return ResponseEntity.ok(responseDTOs);
+    public ResponseEntity<List<RentalRequestDTO>> getRequestsForLandlord(@PathVariable Long landlordId) {
+        List<RentalRequestDTO> requests = rentalRequestService.getRequestsForLandlord(landlordId);
+        return ResponseEntity.ok(requests);
     }
-    @PutMapping("/rental-requests/{id}/approve")
-    public ResponseEntity<RentalRequest> approveRentalRequest(@PathVariable Long id) {
-        return ResponseEntity.ok(rentalRequestService.approveRentalRequest(id));
+
+    @PutMapping("/{rentalRequestId}/approve")
+    public ResponseEntity<RentalRequestDTO> approveRentalRequest(@PathVariable Long rentalRequestId) {
+        RentalRequestDTO approvedRequest = rentalRequestService.approveRentalRequest(rentalRequestId);
+        return ResponseEntity.ok(approvedRequest);
     }
-    
-    @PutMapping("/rental-requests/{id}/reject")
-    public ResponseEntity<RentalRequest> rejectRentalRequest(@PathVariable Long id) {
-        return ResponseEntity.ok(rentalRequestService.rejectRentalRequest(id));
+
+    @PutMapping("/{rentalRequestId}/reject")
+    public ResponseEntity<RentalRequestDTO> rejectRentalRequest(@PathVariable Long rentalRequestId) {
+        RentalRequestDTO rejectedRequest = rentalRequestService.rejectRentalRequest(rentalRequestId);
+        return ResponseEntity.ok(rejectedRequest);
     }
 }

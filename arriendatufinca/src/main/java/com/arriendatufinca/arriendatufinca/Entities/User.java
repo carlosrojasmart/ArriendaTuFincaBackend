@@ -7,6 +7,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -22,6 +23,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -29,6 +31,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"ownedProperties", "rentedProperties", "rentalRequests"})
 @Where(clause = "status = 0")
 @SQLDelete(sql = "UPDATE user SET status = 1 WHERE id=?")
 public class User {
@@ -43,6 +46,7 @@ public class User {
 
     // As landlord (owned properties)
     @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Property> ownedProperties = new ArrayList<>();
 
     // As tenant (rented properties)

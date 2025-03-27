@@ -19,19 +19,16 @@ public class RatingController {
 
     @PostMapping("/landlord")
     public ResponseEntity<RatingDTO> rateLandlord(@RequestBody RatingDTO ratingDTO) {
-        RatingDTO savedRating = ratingService.rateLandlord(ratingDTO);
-        return ResponseEntity.ok(savedRating);
+        return ResponseEntity.ok(ratingService.rateLandlord(ratingDTO));
     }
 
     @PostMapping("/tenant")
     public ResponseEntity<RatingDTO> rateTenant(@RequestBody RatingDTO ratingDTO) {
-        RatingDTO savedRating = ratingService.rateTenant(ratingDTO);
-        return ResponseEntity.ok(savedRating);
+        return ResponseEntity.ok(ratingService.rateTenant(ratingDTO));
     }
 
     @PostMapping("/property")
     public ResponseEntity<RatingDTO> rateProperty(@RequestBody RatingDTO ratingDTO) {
-        RatingDTO savedRating = ratingService.rateProperty(ratingDTO);
-        return ResponseEntity.ok(savedRating);
+        return ResponseEntity.ok(ratingService.rateProperty(ratingDTO));
     }
 }
