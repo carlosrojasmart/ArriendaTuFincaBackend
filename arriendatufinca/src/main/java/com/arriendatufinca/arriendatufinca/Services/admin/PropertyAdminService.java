@@ -21,6 +21,7 @@ public class PropertyAdminService {
 
     @Autowired
     private PropertyRepository propertyRepository; 
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
