@@ -58,7 +58,7 @@ public class RentalRequestControllerTest {
 
         // Verificaciones
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
 
         List<RentalRequestResponseDTO> responseDTOs = response.getBody();
         assertNotNull(responseDTOs);

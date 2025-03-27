@@ -6,7 +6,6 @@ import com.arriendatufinca.arriendatufinca.Services.Tenant.RentalRequestService;
 
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

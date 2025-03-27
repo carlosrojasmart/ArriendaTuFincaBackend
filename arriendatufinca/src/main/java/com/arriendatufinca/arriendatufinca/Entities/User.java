@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
 
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
@@ -29,6 +31,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FilterDef(name = "statusFilter", parameters = @ParamDef(name = "status", type = Integer.class))
 @Filter(name = "statusFilter", condition = "status = 0")
 @SQLDelete(sql = "UPDATE user SET status = 1 WHERE id=?")
 public class User {

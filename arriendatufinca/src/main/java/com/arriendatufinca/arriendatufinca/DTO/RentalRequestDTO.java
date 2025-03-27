@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import com.arriendatufinca.arriendatufinca.Enums.RequestState;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 
-import lombok.Data;
-
 public class RentalRequestDTO {
     private Long id;
     private Long tenantId;

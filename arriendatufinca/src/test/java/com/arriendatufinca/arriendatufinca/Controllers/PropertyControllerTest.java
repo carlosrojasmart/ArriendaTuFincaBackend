@@ -1,7 +1,6 @@
 package com.arriendatufinca.arriendatufinca.Controllers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -79,8 +78,6 @@ class PropertyControllerTest {
         property2.setTitle("Apartamento en Bogotá");
         property2.setCity("Bogotá");
 
-        List<PropertyDTO> mockResults = Arrays.asList(property1, property2);
- 
         when(searchService.searchProperties(any()));
  
         // Act
