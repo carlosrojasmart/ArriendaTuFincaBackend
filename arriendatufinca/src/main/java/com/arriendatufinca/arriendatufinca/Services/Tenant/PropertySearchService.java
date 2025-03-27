@@ -80,7 +80,7 @@ public class PropertySearchService {
         PropertyDTO dto = modelMapper.map(property, PropertyDTO.class);
         dto.setLandlordId(property.getLandlord().getId());
         return dto;
-    }
+    } 
  
     public class PropertySearchCriteria {
     }
