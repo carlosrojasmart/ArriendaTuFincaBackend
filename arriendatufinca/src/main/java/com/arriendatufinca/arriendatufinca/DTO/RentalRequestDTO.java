@@ -1,7 +1,5 @@
 package com.arriendatufinca.arriendatufinca.DTO;
 
-import java.time.LocalDateTime;
-
 import com.arriendatufinca.arriendatufinca.Enums.RequestState;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 
@@ -20,6 +18,5 @@ public class RentalRequestDTO {
     private Long propertyId;
     private RequestState state;
     private StatusEnum status;
-    private LocalDateTime createdAt;
 
 }

@@ -32,7 +32,7 @@ public class PropertyAdminService {
             System.out.println("Recibiendo DTO: " + propertyDTO);
     
             // Buscar el propietario en la base de datos
-            User landlord = userRepository.findById(propertyDTO.getLandlordId())
+            User landlord = userRepository.findById(propertyDTO.getLandlordId())  
                     .orElseThrow(() -> new RuntimeException("Landlord not found"));
             System.out.println("Propietario encontrado: " + landlord);
     
