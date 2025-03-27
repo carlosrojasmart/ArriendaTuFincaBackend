@@ -21,5 +21,5 @@ public class PropertyDTO {
     private String city;
     private String address;
     private double price;
-    private PropertyState status;
+    private PropertyState state;
 }

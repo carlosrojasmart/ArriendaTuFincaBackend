@@ -62,7 +62,7 @@ public class PropertyAdminService {
         Property existingProperty = propertyRepository.findById(propertyId)
                 .orElseThrow(() -> new RuntimeException("Property not found"));
     
-        modelMapper.map(propertyDTO, existingProperty); // Mapea los cambios al objeto existente
+        modelMapper.map(propertyDTO, existingProperty); 
     
         Property updatedProperty = propertyRepository.save(existingProperty);
         return modelMapper.map(updatedProperty, PropertyDTO.class);
@@ -83,8 +83,6 @@ public class PropertyAdminService {
                 .map(Property::getTitle)
                 .collect(Collectors.toList());
     }
-
-
     
     public PropertyDTO deactivateProperty(Long id) {
         Property property = propertyRepository.findById(id)

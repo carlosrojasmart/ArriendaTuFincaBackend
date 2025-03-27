@@ -114,7 +114,7 @@ void testGetPropertiesByLandlord() throws Exception {
 }
     @Test
     void testDeactivateProperty() throws Exception {
-        propertyDTO.setStatus(PropertyState.INACTIVE);
+        propertyDTO.setState(PropertyState.INACTIVE);
 
         when(adminService.deactivateProperty(1L)).thenReturn(propertyDTO);
 
