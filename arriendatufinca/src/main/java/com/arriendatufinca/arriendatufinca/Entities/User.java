@@ -23,6 +23,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -30,6 +31,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"ownedProperties", "rentedProperties", "rentalRequests"})
 @Where(clause = "status = 0")
 @SQLDelete(sql = "UPDATE user SET status = 1 WHERE id=?")
 public class User {
