@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/tenant/rental-requests")
 @RequiredArgsConstructor
 public class RentalRequestSearchController {
-    private final RentalRequestService rentalRequestService;
+    private final RentalRequestService rentalRequestService; 
     private final ModelMapper modelMapper; 
 
     @GetMapping("/{tenantId}")
