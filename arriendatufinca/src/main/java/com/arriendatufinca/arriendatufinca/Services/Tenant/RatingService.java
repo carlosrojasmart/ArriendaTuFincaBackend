@@ -2,6 +2,8 @@ package com.arriendatufinca.arriendatufinca.Services.Tenant;
 
 import java.time.LocalDateTime;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arriendatufinca.arriendatufinca.DTO.RatingDTO;
@@ -16,51 +18,45 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class RatingService {
-    private final RatingRepository ratingRepository;
-    private final RentalRequestRepository rentalRequestRepository;
+
+    @Autowired
+    RatingRepository ratingRepository;
+    @Autowired
+    RentalRequestRepository rentalRequestRepository;
+    @Autowired
+    ModelMapper modelMapper;
+
 
     public RatingDTO rateLandlord(RatingDTO ratingDTO) {
-        RentalRequest request = rentalRequestRepository.findById(ratingDTO.getRequestId())
+         RentalRequest request = rentalRequestRepository.findById(ratingDTO.getRequestId())
                 .orElseThrow(() -> new RuntimeException("Rental request not found"));
-
-        Rating rating = ratingRepository.save(mapToEntity(ratingDTO, request, RatingType.FOR_LANDLORD));
-        return mapToDTO(rating);
+        Rating rating = modelMapper.map(ratingDTO, Rating.class);
+        rating.setRequest(request);
+        rating.setType(RatingType.FOR_LANDLORD);
+        rating.setDate(LocalDateTime.now());
+        rating.setStatus(StatusEnum.ACTIVE);
+        return modelMapper.map(ratingRepository.save(rating), RatingDTO.class);
     }
 
     public RatingDTO rateTenant(RatingDTO ratingDTO) {
         RentalRequest request = rentalRequestRepository.findById(ratingDTO.getRequestId())
-                .orElseThrow(() -> new RuntimeException("Rental request not found"));
-
-        Rating rating = ratingRepository.save(mapToEntity(ratingDTO, request, RatingType.FOR_TENANT));
-        return mapToDTO(rating);
+        .orElseThrow(() -> new RuntimeException("Rental request not found"));
+        Rating rating = modelMapper.map(ratingDTO, Rating.class);
+        rating.setRequest(request);
+        rating.setType(RatingType.FOR_TENANT);
+        rating.setDate(LocalDateTime.now());
+        rating.setStatus(StatusEnum.ACTIVE);
+        return modelMapper.map(ratingRepository.save(rating), RatingDTO.class);
     }
 
     public RatingDTO rateProperty(RatingDTO ratingDTO) {
         RentalRequest request = rentalRequestRepository.findById(ratingDTO.getRequestId())
                 .orElseThrow(() -> new RuntimeException("Rental request not found"));
-
-        Rating rating = ratingRepository.save(mapToEntity(ratingDTO, request, RatingType.FOR_PROPERTY));
-        return mapToDTO(rating);
-    }
-
-    private Rating mapToEntity(RatingDTO ratingDTO, RentalRequest request, RatingType type) {
-        Rating rating = new Rating();
+        Rating rating = modelMapper.map(ratingDTO, Rating.class);
         rating.setRequest(request);
-        rating.setScore(ratingDTO.getScore());
-        rating.setComment(ratingDTO.getComment());
-        rating.setType(type);
+        rating.setType(RatingType.FOR_PROPERTY);
         rating.setDate(LocalDateTime.now());
         rating.setStatus(StatusEnum.ACTIVE);
-        return rating;
-    }
-
-    private RatingDTO mapToDTO(Rating rating) {
-        return new RatingDTO(
-
-                rating.getRequest().getId(),
-                rating.getScore(),
-                rating.getComment()
-                
-        );
+        return modelMapper.map(ratingRepository.save(rating), RatingDTO.class);
     }
 }
