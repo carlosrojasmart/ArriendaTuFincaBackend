@@ -2,8 +2,8 @@ package com.arriendatufinca.arriendatufinca.Entities;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import com.arriendatufinca.arriendatufinca.Enums.RatingType;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
@@ -33,7 +33,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Filter(name = "statusFilter", condition = "status = 0") // Filtra solo los registros activos
+@Where(clause = "status = 0")
 @SQLDelete(sql = "UPDATE rating SET status = 1 WHERE id=?") // Borrado lógico
 @Table(name = "rating")
 public class Rating {

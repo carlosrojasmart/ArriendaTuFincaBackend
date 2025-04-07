@@ -1,7 +1,7 @@
 package com.arriendatufinca.arriendatufinca.Entities;
 
-import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 
@@ -24,7 +24,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Filter(name = "statusFilter", condition = "status = 0")
+@Where(clause = "status = 0")
 @SQLDelete(sql = "UPDATE photo SET status = 0 WHERE id=?")
 @Table(name = "photo")
 public class Photo {

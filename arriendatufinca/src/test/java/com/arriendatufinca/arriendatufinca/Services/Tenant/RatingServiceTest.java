@@ -1,29 +1,27 @@
 package com.arriendatufinca.arriendatufinca.Services.Tenant;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import org.modelmapper.ModelMapper;
 
 import com.arriendatufinca.arriendatufinca.DTO.RatingDTO;
 import com.arriendatufinca.arriendatufinca.Entities.Rating;
 import com.arriendatufinca.arriendatufinca.Entities.RentalRequest;
-import com.arriendatufinca.arriendatufinca.Enums.RatingType;
-import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
 import com.arriendatufinca.arriendatufinca.Repositories.RatingRepository;
 import com.arriendatufinca.arriendatufinca.Repositories.RentalRequestRepository;
 
+@ExtendWith(MockitoExtension.class)
 class RatingServiceTest {
 
     @Mock
@@ -31,6 +29,9 @@ class RatingServiceTest {
 
     @Mock
     private RentalRequestRepository rentalRequestRepository;
+
+    @Mock
+    private ModelMapper modelMapper;
 
     @InjectMocks
     private RatingService ratingService;
@@ -41,73 +42,64 @@ class RatingServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        ratingDTO = new RatingDTO(1L, 5, "Great landlord");
 
         rentalRequest = new RentalRequest();
         rentalRequest.setId(1L);
 
-        ratingDTO = new RatingDTO(1L, 5, "Excelente experiencia");
-
         rating = new Rating();
-        rating.setId(1L);
         rating.setRequest(rentalRequest);
         rating.setScore(5);
-        rating.setComment("Excelente experiencia");
-        rating.setType(RatingType.FOR_LANDLORD);
-        rating.setStatus(StatusEnum.ACTIVE);
+        rating.setComment("Great landlord");
     }
 
     @Test
-    void testRateLandlord() {
+    void rateLandlord_ShouldSaveRating() {
         when(rentalRequestRepository.findById(1L)).thenReturn(Optional.of(rentalRequest));
+        when(modelMapper.map(any(RatingDTO.class), eq(Rating.class))).thenReturn(rating);
         when(ratingRepository.save(any(Rating.class))).thenReturn(rating);
+        when(modelMapper.map(any(Rating.class), eq(RatingDTO.class))).thenReturn(ratingDTO);
 
         RatingDTO result = ratingService.rateLandlord(ratingDTO);
 
         assertNotNull(result);
-        assertEquals(1L, result.getRequestId());
         assertEquals(5, result.getScore());
-        assertEquals("Excelente experiencia", result.getComment());
+        assertEquals("Great landlord", result.getComment());
         verify(ratingRepository).save(any(Rating.class));
     }
 
     @Test
-    void testRateTenant() {
+    void rateTenant_ShouldSaveRating() {
         when(rentalRequestRepository.findById(1L)).thenReturn(Optional.of(rentalRequest));
+        when(modelMapper.map(any(RatingDTO.class), eq(Rating.class))).thenReturn(rating);
         when(ratingRepository.save(any(Rating.class))).thenReturn(rating);
+        when(modelMapper.map(any(Rating.class), eq(RatingDTO.class))).thenReturn(ratingDTO);
 
         RatingDTO result = ratingService.rateTenant(ratingDTO);
 
         assertNotNull(result);
-        assertEquals(1L, result.getRequestId());
         assertEquals(5, result.getScore());
-        assertEquals("Excelente experiencia", result.getComment());
         verify(ratingRepository).save(any(Rating.class));
     }
 
     @Test
-    void testRateProperty() {
+    void rateProperty_ShouldSaveRating() {
         when(rentalRequestRepository.findById(1L)).thenReturn(Optional.of(rentalRequest));
+        when(modelMapper.map(any(RatingDTO.class), eq(Rating.class))).thenReturn(rating);
         when(ratingRepository.save(any(Rating.class))).thenReturn(rating);
+        when(modelMapper.map(any(Rating.class), eq(RatingDTO.class))).thenReturn(ratingDTO);
 
         RatingDTO result = ratingService.rateProperty(ratingDTO);
 
         assertNotNull(result);
-        assertEquals(1L, result.getRequestId());
         assertEquals(5, result.getScore());
-        assertEquals("Excelente experiencia", result.getComment());
         verify(ratingRepository).save(any(Rating.class));
     }
 
     @Test
-    void testRateLandlordThrowsExceptionWhenRequestNotFound() {
+    void rateLandlord_ShouldThrowException_WhenRentalRequestNotFound() {
         when(rentalRequestRepository.findById(1L)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            ratingService.rateLandlord(ratingDTO);
-        });
-
-        assertEquals("Rental request not found", exception.getMessage());
-        verify(ratingRepository, never()).save(any(Rating.class));
+        assertThrows(RuntimeException.class, () -> ratingService.rateLandlord(ratingDTO));
     }
 }

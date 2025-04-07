@@ -11,7 +11,7 @@ public class RentalRequestDTO {
     private Long propertyId;
     private RequestState state;
     private StatusEnum status;
-    private LocalDateTime createdAt; //ARREGLAR Y AGREGAR A FRONT
+    private LocalDateTime createdAt;
 
     public Long getId() {
         return id;

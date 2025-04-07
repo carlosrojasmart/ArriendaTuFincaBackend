@@ -1,18 +1,20 @@
 package com.arriendatufinca.arriendatufinca.Services.Tenant;
 
-import com.arriendatufinca.arriendatufinca.DTO.PropertyDTO;
-import com.arriendatufinca.arriendatufinca.DTO.PropertySearchCriteriaDTO;
-import com.arriendatufinca.arriendatufinca.Entities.Property;
-import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
-import com.arriendatufinca.arriendatufinca.Specifications.PropertySpecification;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.arriendatufinca.arriendatufinca.DTO.PropertyDTO;
+import com.arriendatufinca.arriendatufinca.DTO.PropertySearchCriteriaDTO;
+import com.arriendatufinca.arriendatufinca.Entities.Property;
+import com.arriendatufinca.arriendatufinca.Repositories.PropertyRepository;
+import com.arriendatufinca.arriendatufinca.Specifications.PropertySpecification;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -78,8 +80,8 @@ public class PropertySearchService {
         PropertyDTO dto = modelMapper.map(property, PropertyDTO.class);
         dto.setLandlordId(property.getLandlord().getId());
         return dto;
-    }
-
+    } 
+ 
     public class PropertySearchCriteria {
     }
 }

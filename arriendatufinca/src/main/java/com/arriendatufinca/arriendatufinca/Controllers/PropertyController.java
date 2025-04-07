@@ -2,13 +2,19 @@ package com.arriendatufinca.arriendatufinca.Controllers;
 
 import java.util.List;
 
-import com.arriendatufinca.arriendatufinca.DTO.PropertySearchCriteriaDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.arriendatufinca.arriendatufinca.DTO.PropertyDTO;
-import com.arriendatufinca.arriendatufinca.Entities.Property;
+import com.arriendatufinca.arriendatufinca.DTO.PropertySearchCriteriaDTO;
 import com.arriendatufinca.arriendatufinca.Services.Tenant.PropertySearchService;
 import com.arriendatufinca.arriendatufinca.Services.admin.PropertyAdminService;
 
@@ -31,26 +37,26 @@ public class PropertyController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Property> createProperty(@RequestBody PropertyDTO propertyDTO) {
-        Property savedProperty = adminService.createProperty(propertyDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedProperty);
+    public ResponseEntity<PropertyDTO> createProperty(@RequestBody PropertyDTO propertyDTO) {
+        PropertyDTO createdProperty = adminService.createProperty(propertyDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProperty);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Property> updateProperty(@PathVariable Long id, @RequestBody PropertyDTO propertyDTO) {
-        Property updatedProperty = adminService.updateProperty(id, propertyDTO);
+    public ResponseEntity<PropertyDTO> updateProperty(@PathVariable Long id, @RequestBody PropertyDTO propertyDTO) {
+        PropertyDTO updatedProperty = adminService.updateProperty(id, propertyDTO);
         return ResponseEntity.ok(updatedProperty);
     }
 
-    @GetMapping("/landlord/{id}")
-    public ResponseEntity<List<String>> getPropertiesByLandlord(@PathVariable Long id) {
-        List<String> propertyNames = adminService.getPropertyNamesByUserId(id);
+    @GetMapping("/landlord/{landlordId}") 
+    public ResponseEntity<List<String>> getPropertyNamesByUserId(@PathVariable Long landlordId) {
+        List<String> propertyNames = adminService.getPropertyNamesByUserId(landlordId);
         return ResponseEntity.ok(propertyNames);
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<Property> deactivateProperty(@PathVariable Long id) {
-        Property property = adminService.deactivateProperty(id);
-        return ResponseEntity.ok(property);
+    public ResponseEntity<PropertyDTO> deactivateProperty(@PathVariable Long id) {
+        PropertyDTO deactivatedProperty = adminService.deactivateProperty(id);
+        return ResponseEntity.ok(deactivatedProperty);
     }
 }

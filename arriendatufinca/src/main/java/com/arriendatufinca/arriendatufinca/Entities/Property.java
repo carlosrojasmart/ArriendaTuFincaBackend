@@ -3,8 +3,7 @@ package com.arriendatufinca.arriendatufinca.Entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import com.arriendatufinca.arriendatufinca.Enums.PropertyState;
 import com.arriendatufinca.arriendatufinca.Enums.StatusEnum;
@@ -26,6 +25,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -33,8 +33,8 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Filter(name = "statusFilter", condition = "status = 0")
-@SQLDelete(sql = "UPDATE property SET status = 1 WHERE id=?")
+@ToString(exclude = {"landlord", "rentalRequests", "tenants", "photos"})
+@Where(clause = "status = 0")
 @Table(name = "property")
 public class Property {
     @Id
