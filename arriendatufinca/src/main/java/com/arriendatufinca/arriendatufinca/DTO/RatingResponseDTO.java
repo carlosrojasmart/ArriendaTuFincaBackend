@@ -15,16 +15,4 @@ public class RatingResponseDTO {
     private LocalDateTime date;
     private RatingType type;
 
-    // Campo para el ID de la solicitud
-    private Long requestId;
-
-    // Configuración para el mapeo automático
-    public void setRequestIdFromRequest(Long requestId) {
-        this.requestId = requestId;
-    }
-
-    // O si prefieres, puedes hacerlo así:
-    public void setRequest_Id(Long requestId) {
-        this.requestId = requestId;
-    }
 }
